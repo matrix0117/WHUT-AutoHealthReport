@@ -4,6 +4,7 @@ from config import conf_notification
 from logger import log
 from email.mime.text import MIMEText
 from email.utils import formataddr
+from pypushdeer import PushDeer
 
 # ===== 邮件设置 =====
 # 正确配置并启用后，每次填报后程序会发送电子邮件到对应账户。
@@ -24,7 +25,10 @@ cqhttp = conf_notification["cqhttp"]["enable"]  # 是否启用go-cqhttp发信
 api = conf_notification["cqhttp"]["api"]  # cqhttp http API 地址
 uid = conf_notification["cqhttp"]["uid"]  # 收信QQ号，不填则不发送
 gid = conf_notification["cqhttp"]["gid"]  # 收信群号，不填则不发送
-
+# ===== pushdeer配置 =====
+pushdeer=conf_notification["pushdeer"]["enable"]
+server=conf_notification["pushdeer"]["server"]
+pushkey=conf_notification["pushdeer"]["pushkey"]
 
 def msg(text):
     if cqhttp:
@@ -43,6 +47,15 @@ def msg(text):
             log.error("发送邮件失败")
     else:
         log.info("未启用邮件发信")
+    if pushdeer:
+        try:
+            send_pushdeer(text)
+            log.info("成功发送pushdeer消息")
+        except:
+            log.error("发送pushdeer失败")
+    else:
+        log.info("未启用pushdeer推送")
+    
 
 
 def send_cqhttp(text):
@@ -71,3 +84,7 @@ def send_mail(text):
     mail_msg["Subject"] = "【WHUT-AutoHealthReport】"
     server.sendmail(sender, receiver, mail_msg.as_string())
     server.close()
+
+def send_pushdeer(text):
+    pushdeer = PushDeer(server=server,pushkey=pushkey)
+    pushdeer.send_text(text)

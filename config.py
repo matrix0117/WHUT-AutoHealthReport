@@ -17,6 +17,11 @@ conf_notification = {
         "api": "",
         "uid": "",
         "gid": "",
+    },
+    "pushdeer": {
+        "enable": False,
+        "server": "",
+        "pushkey": "",
     }
 }
 conf_student = []
@@ -68,7 +73,8 @@ def student_dict(global_province: str = "湖北省", global_city: str = "武汉�
         is_leacecity = True
     else:
         is_leacecity = False
-    temperature = input("填报温度，若要修改请与微信小程序一致(留空默认\"36.5°C~36.9°C\"): ") or "36.5°C~36.9°C"
+    temperature = input(
+        "填报温度，若要修改请与微信小程序一致(留空默认\"36.5°C~36.9°C\"): ") or "36.5°C~36.9°C"
     return {
         "account": account,
         "password": password,
@@ -128,6 +134,12 @@ def init_config():
             "cqhttp http API 地址(留空默认\"http://127.0.0.1:5700/send_msg\"): ") or "http://127.0.0.1:5700/send_msg"
         conf_notification["cqhttp"]["uid"] = input("收信QQ号，不填则不发送: ")
         conf_notification["cqhttp"]["gid"] = input("收信群号，不填则不发送: ")
+    print("---PushDeer推送---")
+    enable_pushdeer = input("是否启用PushDeer推送(Y/N): ")
+    if enable_pushdeer == "Y" or enable_pushdeer == "y":
+        conf_notification["pushdeer"]["enable"] = True
+        conf_notification["pushdeer"]["server"] = input("请输入 pushdeer server 地址")
+        conf_notification["pushdeer"]["pushkey"] = input("请输入 pushkey")
     print("======设置完成======")
     save_config()
     print("======保存完成======")
