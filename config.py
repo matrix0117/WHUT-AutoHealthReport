@@ -138,8 +138,8 @@ def init_config():
     enable_pushdeer = input("是否启用PushDeer推送(Y/N): ")
     if enable_pushdeer == "Y" or enable_pushdeer == "y":
         conf_notification["pushdeer"]["enable"] = True
-        conf_notification["pushdeer"]["server"] = input("请输入 pushdeer server 地址")
-        conf_notification["pushdeer"]["pushkey"] = input("请输入 pushkey")
+        conf_notification["pushdeer"]["server"] = input("请输入 pushdeer server 地址: ")
+        conf_notification["pushdeer"]["pushkey"] = input("请输入 pushkey: ")
     print("======设置完成======")
     save_config()
     print("======保存完成======")
